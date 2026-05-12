@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('judul');
             $table->text('abstrak');
             $table->year('tahun_lulus');
-            $table->foreignId('category_id')->constrained('categories')->ondelete('cascade');
+            $table->foreignId('kategori_id')->constrained('kategori')->ondelete('cascade');
             $table->string('file_laporan');
             $table->string('link_repository')->nullable();
             $table->string('demo_video')->nullable();
