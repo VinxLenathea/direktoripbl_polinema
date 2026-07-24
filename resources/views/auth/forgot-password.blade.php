@@ -20,7 +20,7 @@
       <a class="auth-brand" href="index.html"><span class="brand-icon"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i></span><span><strong>adminHMD</strong><small>Get a reset link for your account.</small></span></a>
       <div class="auth-visual"><img src="../assets/images/png/dasher-ui-bootstrap-5.jpg" alt="adminHMD dashboard interface"></div>
       <form method="POST" action="{{ route('password.email') }}" class="needs-validation" novalidate>
-        @csrf  
+        @csrf
         <div class="mb-4">
           <p class="eyebrow mb-1">Secure Access</p>
           <h1 class="h3 mb-1">Forgot Password</h1>

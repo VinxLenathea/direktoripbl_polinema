@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['admin', 'mahasiswa'])->default('mahasiswa')->after('password');
+        Schema::table('tugas_akhir', function (Blueprint $table) {
+            $table->string('pending_file')->nullable()->after('file_laporan');
+            $table->boolean('is_approved')->default(false)->after('pending_file');
         });
     }
 
@@ -21,10 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            if (Schema::hasColumn('users', 'role')) {
-                $table->dropColumn('role');
-            }
+        Schema::table('tugas_akhir', function (Blueprint $table) {
+            $table->dropColumn(['pending_file', 'is_approved']);
         });
     }
 };

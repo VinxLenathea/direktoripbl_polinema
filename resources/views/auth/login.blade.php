@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="adminHMD authentication page">
-    <title>Login | adminHMD</title>
+    <title>Login</title>
 
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/vendors/bootstrap-icons/bootstrap-icons.css">
@@ -13,19 +13,28 @@
 </head>
 
 <body class="auth-body">
-    <button class="icon-button theme-toggle auth-theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme" title="Switch color theme">
-        <i class="bi bi-moon-stars" data-theme-icon aria-hidden="true"></i>
-    </button>
+
     <main class="auth-page">
         <section class="auth-card">
-            <a class="auth-brand" href="index.html"><span class="brand-icon"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i></span><span><strong>adminHMD</strong><small>Sign in to your admin workspace.</small></span></a>
-            <div class="auth-visual"><img src="../assets/images/png/dasher-ui-bootstrap-5.jpg" alt="adminHMD dashboard interface"></div>
+            <div class="text-center mb-4">
+                <img src="{{ asset('assets/images/brand/logo/Logo-Politeknik-Negeri-Malang-Dianisa.com_.png') }}" alt="Politeknik Negeri Malang" class="auth-logo" style="width: 90px; height: auto;" />
+            </div>
+
+            @if(session('success'))
+                <div class="alert alert-success" role="alert">{{ session('success') }}</div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
             <form class="needs-validation" method="POST" action="{{ route('login') }}" novalidate>
                 @csrf
+
                 <div class="mb-4">
-                    <p class="eyebrow mb-1">Secure Access</p>
                     <h1 class="h3 mb-1">Login</h1>
-                    <p class="text-muted mb-0">Sign in to your admin workspace.</p>
                 </div>
                 <div class="mb-3">
                     <x-input-label class="form-label" for="email" :value="__('Email')" />
@@ -36,29 +45,50 @@
                 <div class="mb-3">
                     <div class="d-flex justify-content-between">
                         <x-input-label class="form-label" for="password" :value="__('Password')" />
-                        @if (Route::has('password.request'))
-                        <a class="small fw-semibold" href="{{ route('password.request') }}">{{ __('Forgot your password?') }}</a>
-                        @endif
+
                     </div>
-                    <x-text-input id="password" class="form-control"
-                        type="password"
-                        name="password"
-                        required autocomplete="current-password" />
+                    <div class="position-relative">
+                        <x-text-input id="password" class="form-control"
+                            type="password"
+                            name="password"
+                            required autocomplete="current-password" />
+                        <button type="button" class="btn btn-sm position-absolute"
+                            style="right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; padding: 0;"
+                            id="togglePassword" title="Tampilkan/Sembunyikan Password">
+                            <i class="bi bi-eye" id="passwordIcon"></i>
+                        </button>
+                    </div>
                     <x-input-error :messages="$errors->get('password')" class="invalid-feedback" />
-                </div>
-                <div class="form-check mb-4">
-                    <input class="form-check-input" type="checkbox" id="remember-me" name="remember_me">
-                    <label class="form-check-label" for="remember_me">{{ __('Remember me') }}</label>
                 </div>
                 <button class="btn btn-primary w-100" type="submit"><i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>{{ __('Log in') }}</button>
             </form>
 
-            <div class="auth-footer">New here? <a href="{{ route('register') }}">Create an account</a></div>
+            <div class="auth-footer">Masuk menggunakan akun Anda.</div>
+
         </section>
     </main>
 
-    <script src="../assets/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/main.js"></script>
+
+  <script>
+    document.getElementById('togglePassword').addEventListener('click', function(e) {
+      e.preventDefault();
+      const passwordInput = document.getElementById('password');
+      const passwordIcon = document.getElementById('passwordIcon');
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordIcon.classList.remove('bi-eye');
+        passwordIcon.classList.add('bi-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        passwordIcon.classList.remove('bi-eye-slash');
+        passwordIcon.classList.add('bi-eye');
+      }
+    });
+  </script>
+
 </body>
 
 </html>

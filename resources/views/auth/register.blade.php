@@ -13,20 +13,44 @@
 </head>
 
 <body class="auth-body">
-    <button class="icon-button theme-toggle auth-theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme" title="Switch color theme">
-        <i class="bi bi-moon-stars" data-theme-icon aria-hidden="true"></i>
-    </button>
     <main class="auth-page">
         <section class="auth-card">
-            <a class="auth-brand" href="index.html"><span class="brand-icon"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i></span><span><strong>adminHMD</strong><small>Create your adminHMD account.</small></span></a>
-            <div class="auth-visual"><img src="../assets/images/png/dasher-ui-bootstrap-5.jpg" alt="adminHMD dashboard interface"></div>
-            <form class="needs-validation" method="POST" action="{{ route('register') }}" novalidate>
+            <div class="text-center mb-4">
+                <img src="{{ asset('assets/images/brand/logo/Logo-Politeknik-Negeri-Malang-Dianisa.com_.png') }}" alt="Politeknik Negeri Malang" class="auth-logo" style="width: 90px; height: auto;" />
+            </div>
+
+            <form method="POST" action="{{ route('register') }}">
                 @csrf
+                @php
+                    $selectedRole = old('role') ?? request('role');
+                @endphp
+
                 <div class="mb-4">
-                    <p class="eyebrow mb-1">Secure Access</p>
                     <h1 class="h3 mb-1">Register</h1>
-                    <p class="text-muted mb-0">Create your adminHMD account.</p>
+                    <p class="text-muted mb-0">Create your account.</p>
+
+                    @if(empty($selectedRole))
+                        <div class="mt-3 text-center">
+                            <div class="small text-muted mb-2">Pilih role saat register:</div>
+                            <div class="d-flex gap-2 justify-content-center">
+                                <a class="btn btn-light btn-sm" href="{{ route('register') }}?role=admin">Admin</a>
+                                <a class="btn btn-light btn-sm" href="{{ route('register') }}?role=mahasiswa">Mahasiswa</a>
+                            </div>
+                        </div>
+                        @error('role')
+                            <div class="text-danger small mt-2">{{ $message }}</div>
+                        @enderror
+                    @else
+                        <div class="alert alert-primary mt-3" role="alert">
+                            Register sebagai: <strong>{{ ucfirst($selectedRole) }}</strong>
+                        </div>
+                        <input type="hidden" name="role" value="{{ $selectedRole }}">
+                        @error('role')
+                            <div class="text-danger small">{{ $message }}</div>
+                        @enderror
+                    @endif
                 </div>
+
                 <div class="mb-3">
                     <x-input-label class="form-label" for="name" :value="__('Name')" />
                     <x-text-input id="name" class="form-control" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
@@ -38,6 +62,24 @@
                     <x-text-input id="email" class="form-control" type="email" name="email" :value="old('email')" required autocomplete="username" />
                     <x-input-error :messages="$errors->get('email')" class="invalid-feedback" />
                 </div>
+
+                @if($selectedRole === 'mahasiswa')
+                    <div class="mb-3">
+                        <x-input-label class="form-label" for="nim" value="NIM" />
+                        <x-text-input id="nim" class="form-control" type="text" name="nim" :value="old('nim')" required autocomplete="off" />
+                        <x-input-error :messages="$errors->get('nim')" class="invalid-feedback" />
+                    </div>
+                    <div class="mb-3">
+                        <x-input-label class="form-label" for="jurusan" value="Jurusan" />
+                        <x-text-input id="jurusan" class="form-control" type="text" name="jurusan" :value="old('jurusan')" required />
+                        <x-input-error :messages="$errors->get('jurusan')" class="invalid-feedback" />
+                    </div>
+                    <div class="mb-3">
+                        <x-input-label class="form-label" for="prodi" value="Prodi" />
+                        <x-text-input id="prodi" class="form-control" type="text" name="prodi" :value="old('prodi')" required />
+                        <x-input-error :messages="$errors->get('prodi')" class="invalid-feedback" />
+                    </div>
+                @endif
 
                 <div class="mb-3">
                     <x-input-label class="form-label" for="password" :value="__('Password')" />

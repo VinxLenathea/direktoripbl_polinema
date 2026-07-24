@@ -28,8 +28,26 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Redirect to intended URL if available (e.g., laporan file)
+        // Otherwise redirect based on user role
+        $intendedUrl = redirect()->intended()->getTargetUrl();
+
+        // Check if the intended URL is different from current URL
+        // If it's a laporan URL, go directly to it
+        if ($intendedUrl !== url('/') && str_contains($intendedUrl, '/laporan/')) {
+            return redirect()->intended();
+        }
+
+        $userRole = Auth::user()->role;
+
+        if ($userRole === 'mahasiswa') {
+            return redirect()->route('mahasiswa.dashboard');
+        }
+
+        return redirect()->route('dashboard');
     }
+
+
 
     /**
      * Destroy an authenticated session.
@@ -42,6 +60,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('welcome')->with('success', 'Anda telah berhasil logout.');
     }
 }
